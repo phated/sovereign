@@ -1,0 +1,43 @@
+{
+  "name": "sovereign",
+  "version": "0.0.0",
+  "description": "Separate your state from your components",
+  "author": "Blaine Bublitz <blaine@iceddev.com> (http://iceddev.com)",
+  "contributors": [],
+  "repository": "iceddev/sovereign",
+  "license": "MIT",
+  "engines": {
+    "node": ">= 0.10"
+  },
+  "main": "index.js",
+  "files": [
+    "LICENSE",
+    "index.js"
+  ],
+  "scripts": {
+    "prepublish": "babel ./src --out-dir ./",
+    "test": "lab -cvS -T ./node_modules/lab-babel"
+  },
+  "dependencies": {
+    "lodash": "^3.9.3"
+  },
+  "peerDependencies": {
+    "react": "^0.13.3"
+  },
+  "devDependencies": {
+    "babel": "^5.4.7",
+    "babel-core": "^5.4.7",
+    "code": "^1.4.0",
+    "eslint": "^0.22.1",
+    "lab": "^5.9.0",
+    "lab-babel": "^1.0.1",
+    "react": "^0.13.3"
+  },
+  "keywords": [
+    "flux",
+    "higher order component",
+    "state",
+    "stateful",
+    "stores"
+  ]
+}
