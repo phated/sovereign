@@ -1,6 +1,6 @@
 {
   "name": "sovereign",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "Separate your state from your components",
   "author": "Blaine Bublitz <blaine@iceddev.com> (http://iceddev.com)",
   "contributors": [],
