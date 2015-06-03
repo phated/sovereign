@@ -45,7 +45,7 @@ function createContainer(Component, opts = defaultOptions){
     }
 
     render(){
-      const props = _.assign(this.props, this.state);
+      const props = _.assign({}, this.props, this.state);
 
       return (
         <Component {...props} />
