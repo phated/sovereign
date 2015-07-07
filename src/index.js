@@ -10,6 +10,14 @@ const defaultOptions = {
     return {};
   },
 
+  listen(store, onChange){
+    store.listen(onChange);
+  },
+
+  unlisten(store, onChange){
+    store.unlisten(onChange);
+  },
+
   getPropsFromStores(){
     return {};
   }
@@ -17,31 +25,37 @@ const defaultOptions = {
 
 function createContainer(Component, opts = defaultOptions){
 
-  assert(opts.getStores, 'getStores function is required');
-  assert(opts.getPropsFromStores, 'getPropsFromStores function is required');
+  const { getStores, getPropsFromStores } = opts;
+
+  assert(getStores, 'getStores function is required');
+  assert(getPropsFromStores, 'getPropsFromStores function is required');
+
+  const listen = opts.listen || defaultOptions.listen;
+  const unlisten = opts.unlisten || defaultOptions.unlisten;
 
   class StoreWrapper extends React.Component {
 
     constructor(...args){
       super(...args);
 
-      this.state = opts.getPropsFromStores(this.props);
+      this.removers = {};
+      this.state = getPropsFromStores(this.props);
 
       this.onChange = this.onChange.bind(this);
     }
 
     componentWillMount(){
-      const stores = opts.getStores(this.props);
-      _.forEach(stores, (store) => store.listen(this.onChange));
+      const stores = getStores(this.props);
+      this.removers = _.mapValues(stores, (store) => listen(store, this.onChange));
     }
 
     componentWillUnmount(){
-      const stores = opts.getStores(this.props);
-      _.forEach(stores, (store) => store.unlisten(this.onChange));
+      const stores = getStores(this.props);
+      _.forEach(stores, (store, key) => unlisten(store, this.onChange, this.removers[key]));
     }
 
     onChange(){
-      this.setState(opts.getPropsFromStores(this.props));
+      this.setState(getPropsFromStores(this.props));
     }
 
     render(){

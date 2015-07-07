@@ -127,6 +127,36 @@ experiment('createContainer', () => {
     done();
   });
 
+  test('allows custom listen methods', (done) => {
+    let count = 0;
+
+    const fakeStore = {
+      listen(){},
+      unlisten(){}
+    };
+
+    const Container = createContainer(Component, {
+      getStores(){
+        return {
+          store: fakeStore
+        };
+      },
+
+      listen(store, onChange){
+        expect(store).to.equal(fakeStore);
+        expect(onChange).to.be.a.function();
+        count++;
+      },
+
+      getPropsFromStores(){
+        return {};
+      }
+    });
+    renderer.render(<Container />);
+    expect(count).to.equal(1);
+    done();
+  });
+
   test('store unlisten methods are called upon unmount', (done) => {
     let count = 0;
 
@@ -142,6 +172,108 @@ experiment('createContainer', () => {
         return {
           store: fakeStore
         };
+      },
+
+      getPropsFromStores(){
+        return {};
+      }
+    });
+    renderer.render(<Container />);
+    renderer.unmount();
+    expect(count).to.equal(1);
+    done();
+  });
+
+  test('allows custom unlisten methods', (done) => {
+    let count = 0;
+
+    const fakeStore = {
+      listen(){},
+      unlisten(){}
+    };
+
+    const Container = createContainer(Component, {
+      getStores(){
+        return {
+          store: fakeStore
+        };
+      },
+
+      unlisten(store, onChange){
+        expect(store).to.equal(fakeStore);
+        expect(onChange).to.be.a.function();
+        count++;
+      },
+
+      getPropsFromStores(){
+        return {};
+      }
+    });
+    renderer.render(<Container />);
+    renderer.unmount();
+    expect(count).to.equal(1);
+    done();
+  });
+
+  test('passes a remover into unlisten if listen returns', (done) => {
+    let count = 0;
+
+    function onRemove(){}
+
+    const fakeStore = {
+      listen(){},
+      unlisten(){}
+    };
+
+    const Container = createContainer(Component, {
+      getStores(){
+        return {
+          store: fakeStore
+        };
+      },
+
+      listen(){
+        return onRemove;
+      },
+
+      unlisten(store, onChange, remover){
+        expect(remover).to.be.a.function();
+        expect(remover).to.equal(onRemove);
+        count++;
+      },
+
+      getPropsFromStores(){
+        return {};
+      }
+    });
+    renderer.render(<Container />);
+    renderer.unmount();
+    expect(count).to.equal(1);
+    done();
+  });
+
+  test('does not pass a remover into unlisten if no return from listen', (done) => {
+    let count = 0;
+
+    const fakeStore = {
+      listen(){},
+      unlisten(){}
+    };
+
+    const Container = createContainer(Component, {
+      getStores(){
+        return {
+          store: fakeStore
+        };
+      },
+
+      listen(){
+
+      },
+
+      unlisten(store, onChange, remover){
+        expect(remover).to.be.a.undefined();
+        count++;
       },
 
       getPropsFromStores(){
