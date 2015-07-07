@@ -19,17 +19,17 @@
     "test": "lab -cvS -T ./node_modules/lab-babel"
   },
   "dependencies": {
-    "lodash": "^3.9.3"
+    "lodash": "^3.10.0"
   },
   "peerDependencies": {
     "react": "^0.13.3"
   },
   "devDependencies": {
-    "babel": "^5.4.7",
-    "babel-core": "^5.5.7",
-    "code": "^1.4.0",
-    "eslint": "^0.22.1",
-    "lab": "^5.9.0",
+    "babel": "^5.6.14",
+    "babel-core": "^5.6.15",
+    "code": "^1.4.1",
+    "eslint": "^0.24.0",
+    "lab": "^5.13.0",
     "lab-babel": "phated/lab-babel",
     "react": "^0.13.3"
   },
