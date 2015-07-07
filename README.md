@@ -55,6 +55,7 @@ Must be a valid React component.
 #### Options
 
 Options requires 2 methods, `getStores` and `getPropsFromStores`.
+Also, 2 methods (`listen` and `unlisten`) are optional.
 
 ##### getStores(props)
 
@@ -67,6 +68,21 @@ This method must return the state from the stores that you would like turned int
 library like [`alt`](https://github.com/goatslacker/alt), you could just return `myStore.getState()` or
 you can create a subset or aggregate from multiple stores.  An object must be returned.  This method is called
 to get initial state as well as updated state upon `listen` firing.
+
+##### listen(store, onChange)
+
+This method is called for each store on mount, passing the store and the `onChange` listener into the method.
+The default `listen` method calls `store.listen(onChange)`, but you can override that with this method on
+options. If `listen` returns a function, it is passed into the `unlisten` option (typically this is used
+as a remover function).
+
+##### unlisten(store, onChange, remover)
+
+This method is called for each store on unmount, passing the store, `onChange` listener, and possibly a
+`remover` method if it was returned by the `listen` option. The default `unlisten` method calls
+`store.unlisten(onChange)`, but you can override that with this method on options. If the `listen` option
+returned a function, this method will receive that function as the last parameter and it can be used
+as part of you `unlisten` phase.
 
 ## Shoutout
 
