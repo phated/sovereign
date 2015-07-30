@@ -127,6 +127,32 @@ experiment('createContainer', () => {
     done();
   });
 
+  test('also supports redux style subscribe by default', (done) => {
+    let count = 0;
+
+    const fakeStore = {
+      subscribe(){
+        count++;
+        return function(){};
+      }
+    };
+
+    const Container = createContainer(Component, {
+      getStores(){
+        return {
+          store: fakeStore
+        };
+      },
+
+      getPropsFromStores(){
+        return {};
+      }
+    });
+    renderer.render(<Container />);
+    expect(count).to.equal(1);
+    done();
+  });
+
   test('allows custom listen methods', (done) => {
     let count = 0;
 
@@ -164,6 +190,34 @@ experiment('createContainer', () => {
       listen(){},
       unlisten(){
         count++;
+      }
+    };
+
+    const Container = createContainer(Component, {
+      getStores(){
+        return {
+          store: fakeStore
+        };
+      },
+
+      getPropsFromStores(){
+        return {};
+      }
+    });
+    renderer.render(<Container />);
+    renderer.unmount();
+    expect(count).to.equal(1);
+    done();
+  });
+
+  test('also supports redux style unsubscribe by default', (done) => {
+    let count = 0;
+
+    const fakeStore = {
+      subscribe(){
+        return function(){
+          count++;
+        };
       }
     };
 
