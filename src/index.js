@@ -11,11 +11,19 @@ const defaultOptions = {
   },
 
   listen(store, onChange){
-    store.listen(onChange);
+    if(typeof store.subscribe === 'function'){
+      return store.subscribe(onChange);
+    } else {
+      store.listen(onChange);
+    }
   },
 
-  unlisten(store, onChange){
-    store.unlisten(onChange);
+  unlisten(store, onChange, unsubscribe){
+    if(typeof unsubscribe === 'function'){
+      unsubscribe();
+    } else {
+      store.unlisten(onChange);
+    }
   },
 
   getPropsFromStores(){
