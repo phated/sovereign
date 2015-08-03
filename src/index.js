@@ -47,7 +47,6 @@ function createContainer(Component, opts = defaultOptions){
       super(...args);
 
       this.removers = {};
-      this.state = getPropsFromStores(this.props);
 
       this.onChange = this.onChange.bind(this);
     }
@@ -63,11 +62,12 @@ function createContainer(Component, opts = defaultOptions){
     }
 
     onChange(){
-      this.setState(getPropsFromStores(this.props));
+      this.forceUpdate();
     }
 
     render(){
-      const props = _.assign({}, this.props, this.state);
+      const state = getPropsFromStores(this.props);
+      const props = _.assign({}, this.props, state);
 
       return (
         <Component {...props} />
